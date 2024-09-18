@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, Button, View } from "react-native";
-import {BASE_URL} from "./config.js";
+import { StyleSheet, Text, TextInput, Button, TouchableOpacity, View } from "react-native";
+import { BASE_URL } from "../config/config";
 
 export default function RegisterPage({ navigation }) {
     const [email, setEmail] = useState("");
@@ -12,12 +12,12 @@ export default function RegisterPage({ navigation }) {
             alert("Vui lòng điền đầy đủ thông tin.");
             return;
         }
-    
+
         if (password !== confirmPassword) {
             alert("Mật khẩu không khớp.");
             return;
         }
-    
+
         fetch(`${BASE_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
@@ -27,10 +27,9 @@ export default function RegisterPage({ navigation }) {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             if (data.success) {
-                alert("Đăng ký thành công!");
-                navigation.replace("Login");
+                alert("Đăng ký thành công! Vui lòng kiểm tra email của bạn để nhận mã OTP.");
+                navigation.navigate("ActivateAccount", { email }); // Chuyển đến trang kích hoạt với email
             } else {
                 alert("Đăng ký thất bại. Vui lòng thử lại.");
             }
@@ -40,11 +39,6 @@ export default function RegisterPage({ navigation }) {
             alert("Có lỗi xảy ra. Vui lòng thử lại.");
         });
     };
-    
-    
-    
-    
-    
 
     return (
         <View style={styles.container}>
@@ -73,6 +67,12 @@ export default function RegisterPage({ navigation }) {
             />
 
             <Button title="Đăng ký" onPress={handleRegister} />
+            <View style={styles.loginContainer}>
+                <Text>Đã có tài khoản?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                    <Text style={styles.loginLink}>Đăng nhập ngay</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -93,5 +93,13 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 15,
         borderRadius: 5,
+    },
+    loginContainer: {
+        marginTop: 20,
+        alignItems: "center",
+    },
+    loginLink: {
+        color: "blue",
+        marginTop: 5,
     },
 });

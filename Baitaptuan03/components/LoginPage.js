@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, Button, View } from "react-native";
-import {BASE_URL} from "./config.js";
+import { StyleSheet, Text, TextInput, Button, TouchableOpacity, View } from "react-native";
+import { BASE_URL } from "../config/config";
 
 export default function LoginPage({ navigation }) {
     const [email, setEmail] = useState("");
@@ -29,7 +29,6 @@ export default function LoginPage({ navigation }) {
         });
     };
     
-
     return (
         <View style={styles.container}>
             <Text style={styles.label}>Email</Text>
@@ -50,10 +49,17 @@ export default function LoginPage({ navigation }) {
 
             <Button title="Đăng nhập" onPress={handleLogin} />
 
-            {/* Nút để chuyển qua trang Đăng ký */}
+            {/* Dòng "Quên mật khẩu?" */}
+            <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+                <Text style={styles.forgotPassword}>Quên mật khẩu?</Text>
+            </TouchableOpacity>
+
+            {/* Dòng "Chưa có tài khoản? Đăng ký ngay" */}
             <View style={styles.registerContainer}>
                 <Text>Chưa có tài khoản?</Text>
-                <Button title="Đăng ký" onPress={() => navigation.navigate("Register")} />
+                <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+                    <Text style={styles.registerLink}>Đăng ký ngay</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -76,8 +82,17 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderRadius: 5,
     },
+    forgotPassword: {
+        marginTop: 10,
+        color: "blue",
+        textAlign: "center",
+    },
     registerContainer: {
         marginTop: 20,
         alignItems: "center",
+    },
+    registerLink: {
+        color: "blue",
+        marginTop: 5,
     },
 });
